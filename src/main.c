@@ -13,8 +13,21 @@ int main(int argc, const char* argv[]) {
     write_chunk(&chunk, OP_CONSTANT, 123);
     write_chunk(&chunk, constant, 123);
 
+    constant = addConstant(&chunk, 3.4);
+    writeChunk(&chunk, OP_CONSTANT, 123);
+    writeChunk(&chunk, constant, 123);
+
+    writeChunk(&chunk, OP_ADD, 123);
+
+    constant = addConstant(&chunk, 5.6);
+    writeChunk(&chunk, OP_CONSTANT, 123);
+    writeChunk(&chunk, constant, 123);
+
+    writeChunk(&chunk, OP_DIVIDE, 123);
+
+    write_chunk(&chunk, OP_NEGATE, 123);
+
     write_chunk(&chunk, OP_RETURN, 123);
-    disassemble_chunk(&chunk, "test chunk");
 
     interpret(&chunk);
 

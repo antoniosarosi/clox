@@ -10,6 +10,11 @@
 typedef enum {
     // TODO: Add OP_CONSTANT_LONG that uses 3 bytes instead of 1 for indexing.
     OP_CONSTANT,
+    OP_ADD,
+    OP_SUBTRACT,
+    OP_MULTIPLY,
+    OP_DIVIDE,
+    OP_NEGATE,
     OP_RETURN,
 } OpCode;
 
