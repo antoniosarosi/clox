@@ -25,7 +25,7 @@ typedef struct {
 #define BOOL_VAL(value) ((Value){VAL_BOOL, {.boolean = value}})
 #define NIL_VAL ((Value){VAL_NIL, {.number = 0}})
 #define NUMBER_VAL(value) ((Value){VAL_NUMBER, {.number = value}})
-#define OBJ_VAL(value) ((Value){VAL_OBJ, {.obj = value}})
+#define OBJ_VAL(value) ((Value){VAL_OBJ, {.obj = (Obj*)value}})
 
 #define AS_BOOL(value) ((value).as.boolean)
 #define AS_NUMBER(value) ((value).as.number)
