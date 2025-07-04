@@ -28,6 +28,16 @@ static void free_object(Obj* object) {
             break;
         }
 
+        case OBJ_UPVALUE: {
+            FREE(ObjUpvalue, object);
+            break;
+        }
+
+        case OBJ_CLOSURE: {
+            FREE(ObjClosure, object);
+            break;
+        }
+
         case OBJ_FUNCTION: {
             ObjFunction* function = (ObjFunction*)object;
             free_chunk(&function->chunk);
