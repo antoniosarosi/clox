@@ -12,8 +12,11 @@ DEPS := $(OBJS:.o=.d)
 INC_DIRS := $(shell find $(SRC_DIRS) -type d)
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
+# List of available debug options
+DEBUG_OPTIONS := DEBUG_PRINT_CODE DEBUG_TRACE_EXECUTION DEBUG_STRESS_GC DEBUG_LOG_GC
+
 CC := gcc
-CFLAGS := $(INC_FLAGS) -MMD -MP
+CFLAGS := $(INC_FLAGS) -MMD -MP $(foreach opt,$(DEBUG_OPTIONS),$(if $($(opt)),-D$(opt)))
 
 # The final build step.
 $(BUILD_DIR)/$(TARGET_EXE): $(OBJS)

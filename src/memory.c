@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "compiler.h"
@@ -5,7 +6,6 @@
 #include "vm.h"
 
 #ifdef DEBUG_LOG_GC
-    #include <stdio.h>
     #include "debug.h"
 #endif
 
@@ -89,6 +89,19 @@ static void blacken_object(Obj* object) {
     #endif
 
     switch (object->type) {
+        case OBJ_CLASS: {
+            ObjClass* cls = (ObjClass*)object;
+            mark_object((Obj*)cls->name);
+            break;
+        }
+
+        case OBJ_INSTANCE: {
+            ObjInstance* instance = (ObjInstance*)object;
+            mark_object((Obj*)instance->cls);
+            mark_table(&instance->fields);
+            break;
+        }
+
         case OBJ_UPVALUE: {
             mark_value(((ObjUpvalue*)object)->closed);
             break;
@@ -122,6 +135,18 @@ static void free_object(Obj* object) {
     #endif
 
     switch (object->type) {
+        case OBJ_CLASS: {
+            FREE(ObjClass, object);
+            break;
+        }
+
+        case OBJ_INSTANCE: {
+            ObjInstance* instance = (ObjInstance*)object;
+            free_table(&instance->fields);
+            FREE(ObjInstance, object);
+            break;
+        }
+
         case OBJ_STRING: {
             ObjString* string = (ObjString*)object;
             FREE_ARRAY(char, string->chars, string->length + 1);

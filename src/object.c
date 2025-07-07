@@ -24,6 +24,19 @@ static Obj* allocate_object(size_t size, ObjType type) {
     return object;
 }
 
+ObjClass* new_class(ObjString* name) {
+    ObjClass* cls = ALLOCATE_OBJ(ObjClass, OBJ_CLASS);
+    cls->name = name;
+    return cls;
+}
+
+ObjInstance* new_instance(ObjClass* cls) {
+    ObjInstance* instance = ALLOCATE_OBJ(ObjInstance, OBJ_INSTANCE);
+    instance->cls = cls;
+    init_table(&instance->fields);
+    return instance;
+}
+
 ObjClosure* new_closure(ObjFunction* function) {
     ObjUpvalue** upvalues = ALLOCATE(ObjUpvalue*, function->upvalue_count);
     for (int i = 0; i < function->upvalue_count; i++) {
@@ -121,6 +134,16 @@ static void print_function(ObjFunction* function) {
 
 void print_object(Value value) {
     switch (OBJ_TYPE(value)) {
+        case OBJ_CLASS: {
+            printf("<class %s>", AS_CLASS(value)->name->chars);
+            break;
+        }
+
+        case OBJ_INSTANCE: {
+            printf("<%s instance>", AS_INSTANCE(value)->cls->name->chars);
+            break;
+        }
+
         case OBJ_STRING: {
             printf("%s", AS_CSTRING(value));
             break;
